@@ -1,0 +1,34 @@
+.wrap {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 240px;
+    height: 100%;
+    background: #323644;
+    &.collapsed {
+        width: 75px;
+    }
+}
+.head {
+    height: 100px;
+    position: relative;
+}
+.menuItem {
+    padding: 20px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 300;
+    text-transform: uppercase;
+}
+.iconMenu {
+    transition: all 0.2s linear;
+    width: 34px;
+    height: 34px;
+    fill: #ffffff;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translate(0, -50%);
+    &:hover {
+        fill: #68abb7;
+    }
+}
