@@ -20,6 +20,12 @@ class CreateProduct extends Component {
     //     this.setState({ opened: !this.state.opened });
     // };
 
+    componentDidMount() {
+        axios.get('currency.json')
+            .then(res => console.log('GET RESULT: ', res) )
+            .catch(err => console.log('GET CURRENCY ERROR: ', err) );
+    }
+
     onChangeHandler = (e, field) => {
         let obj = {};
         obj[field] = e.target.value;
