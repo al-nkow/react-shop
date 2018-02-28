@@ -5,3 +5,29 @@
     padding: 10px;
     border: 1px solid #efefef;
 }
+.formBlock {
+    margin-bottom: 5px;
+}
+.label {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 16px;
+}
+.input {
+    color: #666666;
+    font-size: 14px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 34px;
+    padding: 0 10px;
+    border: 1px solid #d6d6d6;
+    border-radius: 4px;
+    &:focus {
+        outline: none;
+    }
+    &.area {
+        padding: 10px;
+        height: 88px;
+        resize: none;
+    }
+}

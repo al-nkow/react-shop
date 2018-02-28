@@ -1,41 +1,87 @@
 import React, { Component } from 'react';
 import classes from './CreateProduct.scss';
 
+import axios from '../../axios-products';
+
+import Spinner from '../../components/Spinner/Spinner';
+import Aux from '../../hoc/Aux/Aux';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+
 class CreateProduct extends Component {
 
-    state = { name: '' };
+    state = {
+        name: '',
+        price: '',
+        comments: '',
+        loading: false,
+    };
     //
     // toggleMenuHandler = () => {
     //     this.setState({ opened: !this.state.opened });
     // };
 
-    onChangeHandler = (e) => {
-        this.setState({ name: e.target.value });
+    onChangeHandler = (e, field) => {
+        let obj = {};
+        obj[field] = e.target.value;
+        this.setState(obj);
+    };
+
+    send = () => {
+        const data = {
+            name: this.state.name,
+            price: this.state.price,
+            comments: this.state.comments,
+            user: {
+                name: 'John',
+                age: 33,
+                address: {
+                    city: 'S-Petersburg',
+                    street: 'Rybatskiy pr.'
+                }
+            }
+        };
+        this.setState({ loading: true });
+        axios.post('/products.json', data) // products.json - такое требование к запросам у firebase (обычно просто адрес)
+            .then(res => {
+                setTimeout(() => {
+                    this.setState({ loading: false });
+                    console.log('SAVE PRODUCT RESULT: ', res)
+                }, 2000);
+            })
+            .catch(error => {
+                this.setState({ loading: false });
+                console.log('SAVE PRODUCT ERROR: ', error)
+            });
     };
 
     render () {
+
         return (
             <div className={ classes.mainBlock }>
-                <div>
-                    <label htmlFor="cprodname">Name</label>
-                    <input type="text" id="cprodname" value={this.state.name} onChange={ (e) => this.onChangeHandler(e) }/>
-                </div>
+                { this.state.loading ? <Spinner /> : <Aux>
+                    <div className={ classes.formBlock }>
+                        <label className={ classes.label } htmlFor="cprodname">Name</label>
+                        <input className={ classes.input } type="text" id="cprodname" value={ this.state.name } onChange={ (e) => this.onChangeHandler(e, 'name') }/>
+                    </div>
+                    <div className={ classes.formBlock }>
+                        <label className={ classes.label } htmlFor="cprodprice">Price</label>
+                        <input className={ classes.input } type="text" id="cprodprice" value={ this.state.price } onChange={ (e) => this.onChangeHandler(e, 'price') }/>
+                    </div>
+                    <div className={ classes.formBlock }>
+                        <label className={ classes.label } htmlFor="cprodcomm">Comments</label>
+                        <textarea
+                            className={ classes.input + ' ' + classes.area }
+                            id="cprodcomm"
+                            value={ this.state.comments }
+                            onChange={ (e) => this.onChangeHandler(e, 'comments') }>
+                    </textarea>
+                        {/* Добавить Цвета: - с возможностью добавлять/убирать - кнопка Add */}
+                    </div>
+                    <button onClick={ this.send }>TEST</button>
+                </Aux> }
             </div>
-            // <div className={ `${classes.wrap} ${this.state.opened ? '' : classes.collapsed}` }>
-            //
-            //     <div className={ classes.head }>
-            //         <IconMenu clickEvent={ this.toggleMenuHandler } iconClass={ classes.iconMenu } />
-            //     </div>
-            //
-            //     <div className={ classes.menuItem }>Menu item</div>
-            //     <div className={ classes.menuItem }>Articles</div>
-            //     <div className={ classes.menuItem }>Contacts</div>
-            //     <div className={ classes.menuItem }>Users</div>
-            //     <div className={ classes.menuItem }>About</div>
-            //
-            // </div>
         );
     }
 }
 
-export default CreateProduct;
+export default withErrorHandler(CreateProduct, axios);
